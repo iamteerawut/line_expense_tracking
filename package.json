@@ -1,0 +1,23 @@
+{
+  "name": "line-api-nodejs-boilerplate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iamteerawut/line-api-nodejs-boilerplate.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iamteerawut/line-api-nodejs-boilerplate/issues"
+  },
+  "homepage": "https://github.com/iamteerawut/line-api-nodejs-boilerplate#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
