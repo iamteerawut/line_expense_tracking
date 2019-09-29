@@ -140,7 +140,7 @@ function MessageHandler(message) {
             l: 'lodging'
         }[m[3].toLowerCase()];
         const remarks = m[2];
-        return await createBubble(amount, category);
+        return createBubble(amount, category);
     }
 }
 
