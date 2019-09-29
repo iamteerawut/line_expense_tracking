@@ -126,7 +126,7 @@ function createBubble(amout, category) {
 }
 
 function MessageHandler(message) {
-    let match = RegExpMatchArray | null
+    let match;
     if ((match = message.match(/^[\d.]+j?[tfghmol]$/i))) {
         const m = match;
         const amount = (+m[1] * (m[2])).toFixed(2);
