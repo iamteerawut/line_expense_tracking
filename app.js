@@ -49,7 +49,7 @@ function handleEvent(event) {
   return client.replyMessage(event.replyToken, echo);
 }
 
-function createBubble(amount, category) {
+async function createBubble(amount, category) {
     const date = new Date().toJSON().split('T')[0]
     const data = {
         type: "bubble",
@@ -122,7 +122,7 @@ function createBubble(amount, category) {
           ]
         }
       }
-      return data;
+      return await data;
 }
 
 async function MessageHandler(message) {
