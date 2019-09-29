@@ -128,7 +128,7 @@ async function createBubble(amount, category) {
 
 async function MessageHandler(message) {
     let match;
-    if ((match = message.match(/^[\d.]?[tfghmol]$/i))) {
+    if ((match = message.match(/^[\d.]+?[tfghmol]$/i))) {
         const m = match;
         const amount = (+m[1]);
         const category = {
