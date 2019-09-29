@@ -127,9 +127,9 @@ function createBubble(amout, category) {
 
 function MessageHandler(message) {
     let match;
-    if ((match = message.match(/^[\d.]+j?[tfghmol]$/i))) {
+    if ((match = message.match(/^[\d.]?[tfghmol]$/i))) {
         const m = match;
-        const amount = (+m[1] * (m[2])).toFixed(2);
+        const amount = (+m[1]);
         const category = {
             t: 'transportation',
             f: 'food',
@@ -138,8 +138,7 @@ function MessageHandler(message) {
             m: 'miscellaneous',
             o: 'occasion',
             l: 'lodging'
-        }[m[3].toLowerCase()];
-        const remarks = m[2];
+        }[m[2].toLowerCase()];
         return createBubble(amount, category);
     }
 }
