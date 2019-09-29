@@ -122,6 +122,7 @@ async function createBubble(amount, category) {
           ]
         }
       }
+      console.log(data);
       return await data;
 }
 
