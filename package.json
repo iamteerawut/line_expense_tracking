@@ -19,6 +19,7 @@
   "homepage": "https://github.com/iamteerawut/line-api-nodejs-boilerplate#readme",
   "dependencies": {
     "@line/bot-sdk": "^6.8.2",
+    "airtable": "^0.7.1",
     "express": "^4.17.1"
   }
 }

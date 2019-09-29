@@ -39,36 +39,46 @@ function handleEvent(event) {
     // ignore non-text-message event
     return Promise.resolve(null);
   }
-
+  
   // create a echoing text message
   const echo = {
     type: "flex",
     altText: "Test Flexbox",
     contents: {
       type: "bubble",
-      direction: "ltr",
+      styles: {
+        header: {},
+        body: {},
+        footer: {}
+      },
       header: {
         type: "box",
         layout: "vertical",
         contents: [
           {
             type: "text",
-            text: "Purchase",
+            text: "TRACK EXPENSE",
             size: "lg",
-            align: "start",
             weight: "bold",
-            color: "#009813"
-          },
+            color: "#1DB446",
+            align: "start"
+          }
+        ]
+      },
+      body: {
+        type: "box",
+        layout: "vertical",
+        contents: [
           {
             type: "text",
-            text: "฿ 100.00",
-            size: "3xl",
+            text: "฿500",
+            size: "xxl",
             weight: "bold",
             color: "#000000"
           },
           {
             type: "text",
-            text: "Rabbit Line Pay",
+            text: "Food & Beverage",
             size: "lg",
             weight: "bold",
             color: "#000000"
@@ -78,125 +88,56 @@ function handleEvent(event) {
             text: "2019.02.14 21:47 (GMT+0700)",
             size: "xs",
             color: "#B2B2B2"
-          },
-          {
-            type: "text",
-            text: "Payment complete.",
-            margin: "lg",
-            size: "lg",
-            color: "#000000"
-          }
-        ]
-      },
-      body: {
-        type: "box",
-        layout: "vertical",
-        contents: [
-          {
-            type: "separator",
-            color: "#C3C3C3"
-          },
-          {
-            type: "box",
-            layout: "baseline",
-            margin: "lg",
-            contents: [
-              {
-                type: "text",
-                text: "Merchant",
-                align: "start",
-                color: "#C3C3C3"
-              },
-              {
-                type: "text",
-                text: "BTS 01",
-                align: "end",
-                color: "#000000"
-              }
-            ]
-          },
-          {
-            type: "box",
-            layout: "baseline",
-            margin: "lg",
-            contents: [
-              {
-                type: "text",
-                text: "New balance",
-                color: "#C3C3C3"
-              },
-              {
-                type: "text",
-                text: "฿ 45.57",
-                align: "end"
-              }
-            ]
-          },
-          {
-            type: "separator",
-            margin: "lg",
-            color: "#C3C3C3"
           }
         ]
       },
       footer: {
         type: "box",
         layout: "horizontal",
+        margin: "lg",
         contents: [
           {
             type: "text",
-            text: "View Details",
-            size: "lg",
-            align: "start",
+            text: "Total",
+            size: "md",
+            weight: "bold",
             color: "#0084B6",
-            action: {
-              type: "uri",
-              label: "View Details",
-              uri: "https://google.co.th/"
-            }
+            align: "start"
+          },
+          {
+            type: "text",
+            text: "฿500",
+            color: "#000000",
+            size: "md",
+            weight: "bold",
+            align: "end"
           }
         ]
       }
-    },
-    quickReply: {
-      items: [
-        {
-          type: "action",
-          action: {
-            type: "message",
-            label: "Yes",
-            text: "Yes"
-          }
-        },
-        {
-          type: "action",
-          action: {
-            type: "message",
-            label: "No",
-            text: "No"
-          }
-        },
-        {
-          type: "action",
-          action: {
-            type: "cameraRoll",
-            label: "Send photo"
-          }
-        },
-        {
-          type: "action",
-          action: {
-            type: "camera",
-            label: "Open camera"
-          }
-        }
-      ]
     }
   };
 
   // use reply API
   return client.replyMessage(event.replyToken, echo);
 }
+
+// function MessageHandler() {
+//     if ((match = message.match(/^[\d.]+j?[tfghmol]$/i))) {
+//         const m = match;
+//         const amount = (+m[1] * (m[2])).toFixed(2);
+//         const category = {
+//             t: 'transportation',
+//             f: 'food',
+//             g: 'game',
+//             h: 'health',
+//             m: 'miscellaneous',
+//             o: 'occasion',
+//             l: 'lodging'
+//         }[m[3].toLowerCase()];
+//         const remarks = m[2];
+//         return await recordExpense(context, amount, category, remarks);
+//     }
+// }
 
 // listen on port
 const port = process.env.PORT;
