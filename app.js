@@ -43,101 +43,107 @@ function handleEvent(event) {
   // create a echoing text message
   const echo = {
     type: "flex",
-    altText: "Test Flexbox",
-    contents: {
-      type: "bubble",
-      styles: {
-        header: {},
-        body: {},
-        footer: {}
-      },
-      header: {
-        type: "box",
-        layout: "vertical",
-        contents: [
-          {
-            type: "text",
-            text: "TRACK EXPENSE",
-            size: "lg",
-            weight: "bold",
-            color: "#1DB446",
-            align: "start"
-          }
-        ]
-      },
-      body: {
-        type: "box",
-        layout: "vertical",
-        contents: [
-          {
-            type: "text",
-            text: "฿500",
-            size: "xxl",
-            weight: "bold",
-            color: "#000000"
-          },
-          {
-            type: "text",
-            text: "Food & Beverage",
-            size: "lg",
-            weight: "bold",
-            color: "#000000"
-          },
-          {
-            type: "text",
-            text: "2019.02.14 21:47 (GMT+0700)",
-            size: "xs",
-            color: "#B2B2B2"
-          }
-        ]
-      },
-      footer: {
-        type: "box",
-        layout: "horizontal",
-        margin: "lg",
-        contents: [
-          {
-            type: "text",
-            text: "Total",
-            size: "md",
-            weight: "bold",
-            color: "#0084B6",
-            align: "start"
-          },
-          {
-            type: "text",
-            text: "฿500",
-            color: "#000000",
-            size: "md",
-            weight: "bold",
-            align: "end"
-          }
-        ]
-      }
-    }
+    contents: MessageHandler(event.message.text)
   };
 
   // use reply API
   return client.replyMessage(event.replyToken, echo);
 }
 
-// function MessageHandler() {
-//     if ((match = message.match(/^[\d.]+j?[tfghmol]$/i))) {
-//         const m = match;
-//         const amount = (+m[1] * (m[2])).toFixed(2);
-//         const category = {
-//             t: 'transportation',
-//             f: 'food',
-//             g: 'game',
-//             h: 'health',
-//             m: 'miscellaneous',
-//             o: 'occasion',
-//             l: 'lodging'
-//         }[m[3].toLowerCase()];
-//         const remarks = m[2];
-//         return await recordExpense(context, amount, category, remarks);
-//     }
-// }
+function createBubble(amout, category) {
+    const date = new Date().toJSON().split('T')[0]
+    const data = {
+        type: "bubble",
+        styles: {
+          header: {},
+          body: {},
+          footer: {}
+        },
+        header: {
+          type: "box",
+          layout: "vertical",
+          contents: [
+            {
+              type: "text",
+              text: "TRACK EXPENSE",
+              size: "lg",
+              weight: "bold",
+              color: "#1DB446",
+              align: "start"
+            }
+          ]
+        },
+        body: {
+          type: "box",
+          layout: "vertical",
+          contents: [
+            {
+              type: "text",
+              text: `${amount}`,
+              size: "xxl",
+              weight: "bold",
+              color: "#000000"
+            },
+            {
+              type: "text",
+              text: `${category}`,
+              size: "lg",
+              weight: "bold",
+              color: "#000000"
+            },
+            {
+              type: "text",
+              text: `${date}`,
+              size: "xs",
+              color: "#B2B2B2"
+            }
+          ]
+        },
+        footer: {
+          type: "box",
+          layout: "horizontal",
+          margin: "lg",
+          contents: [
+            {
+              type: "text",
+              text: "Total",
+              size: "md",
+              weight: "bold",
+              color: "#0084B6",
+              align: "start"
+            },
+            {
+              type: "text",
+              text: "฿500",
+              color: "#000000",
+              size: "md",
+              weight: "bold",
+              align: "end"
+            }
+          ]
+        }
+      }
+      return data;
+}
+
+function MessageHandler(message) {
+    let match = RegExpMatchArray | null
+    if ((match = message.match(/^[\d.]+j?[tfghmol]$/i))) {
+        const m = match;
+        const amount = (+m[1] * (m[2])).toFixed(2);
+        const category = {
+            t: 'transportation',
+            f: 'food',
+            g: 'game',
+            h: 'health',
+            m: 'miscellaneous',
+            o: 'occasion',
+            l: 'lodging'
+        }[m[3].toLowerCase()];
+        const remarks = m[2];
+        return await createBubble(amount, category);
+    }
+}
 
 // listen on port
 const port = process.env.PORT;
