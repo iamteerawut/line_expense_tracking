@@ -49,7 +49,7 @@ function handleEvent(event) {
   return client.replyMessage(event.replyToken, echo);
 }
 
-function createBubble(amout, category) {
+function createBubble(amount, category) {
     const date = new Date().toJSON().split('T')[0]
     const data = {
         type: "bubble",
