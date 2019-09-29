@@ -8,6 +8,11 @@ const config = {
   channelSecret: "2f02b59173d521aeeb8169caaeb5e0d3"
 };
 
+// create LINE SDK client
+const client = new line.Client(config);
+
+// create Express app
+// about Express itself: https://expressjs.com/
 const app = express();
 
 // register a webhook handler with middleware
