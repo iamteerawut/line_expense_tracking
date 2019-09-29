@@ -139,7 +139,7 @@ async function MessageHandler(message) {
             o: 'occasion',
             l: 'lodging'
         }[m[2].toLowerCase()];
-        return await createBubble(amount, category);
+        return await createBubble(100, 'food');
     }
 }
 
