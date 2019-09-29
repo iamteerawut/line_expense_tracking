@@ -125,7 +125,7 @@ function createBubble(amount, category) {
       return data;
 }
 
-function MessageHandler(message) {
+async function MessageHandler(message) {
     let match;
     if ((match = message.match(/^[\d.]?[tfghmol]$/i))) {
         const m = match;
@@ -139,7 +139,7 @@ function MessageHandler(message) {
             o: 'occasion',
             l: 'lodging'
         }[m[2].toLowerCase()];
-        return createBubble(amount, category);
+        return await createBubble(amount, category);
     }
 }
 
