@@ -42,7 +42,7 @@ function handleEvent(event) {
   }
 
   // create a echoing text message
-  const echo = messageHandler(event.message.text);
+  const echo = messageHandler(base, event.message.text);
 
   // use reply API
   return client.replyMessage(event.replyToken, echo);
