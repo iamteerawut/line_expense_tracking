@@ -1,5 +1,9 @@
 const line = require("@line/bot-sdk");
 const express = require("express");
+const Airtable = require("airtable");
+var base = new Airtable({ apiKey: "keyiX5ZW3OoiIQrjB" }).base(
+  "appLhxBgLIBdcxn2z"
+);
 
 // create LINE SDK config from env variables
 const config = {
@@ -45,7 +49,7 @@ function handleEvent(event) {
 }
 
 // create flex bubble
-function createBubble(amount, category) {
+function createBubble(base, amount, category) {
   const date = new Date().toJSON().split("T")[0];
   const data = {
     type: "flex",
@@ -99,11 +103,19 @@ function createBubble(amount, category) {
       }
     }
   };
+  base("Uc68ae504e2766ba1fdee724be2c875d4").create(
+    {
+      Date: date,
+      Category: category,
+      Amount: amount
+    },
+    { typecast: true }
+  );
   return data;
 }
 
 // message handler
-function messageHandler(message) {
+function messageHandler(base, message) {
   let match;
   if ((match = message.match(/^([\d.]+)([tfghmol])$/i))) {
     const m = match;
@@ -118,7 +130,7 @@ function messageHandler(message) {
       o: "Occasion",
       l: "Lodging"
     }[m[2].toLowerCase()];
-    return createBubble(amount, category);
+    return createBubble(base, amount, category);
   }
 }
 
