@@ -51,6 +51,18 @@ function handleEvent(event) {
 // create flex bubble
 function createBubble(base, amount, category) {
   const date = new Date().toJSON().split("T")[0];
+  var tableData = base("Uc68ae504e2766ba1fdee724be2c875d4")
+    .table("Uc68ae504e2766ba1fdee724be2c875d4")
+    .select()
+    .all();
+  const normalRecords = tableData.filter(r => !r.get("Occasional"));
+  const total = records =>
+    records.map(r => +r.get("Amount") || 0).reduce((a, b) => a + b, 0);
+  const firstDate = normalRecords
+    .map(r => r.get("Date"))
+    .reduce((a, b) => (a < b ? a : b), date);
+  const todayUsage = total(normalRecords.filter(r => r.get("Date") === date));
+  const totalUsage = total(normalRecords);
   const data = {
     type: "flex",
     altText: `฿${amount} used for ${category}`,
@@ -69,7 +81,7 @@ function createBubble(base, amount, category) {
           },
           {
             type: "text",
-            text: `฿${amount}`,
+            text: `฿${amount} ${todayUsage}`,
             weight: "bold",
             size: "xxl",
             margin: "md"
