@@ -52,7 +52,6 @@ function handleEvent(event) {
 function createBubble(base, amount, category) {
   const date = new Date().toJSON().split("T")[0];
   var tableData = base("Uc68ae504e2766ba1fdee724be2c875d4")
-    .table("Uc68ae504e2766ba1fdee724be2c875d4")
     .select()
     .all();
   const normalRecords = tableData.filter(r => !r.get("Occasional"));
