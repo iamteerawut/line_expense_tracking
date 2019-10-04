@@ -49,7 +49,7 @@ function createBubble(amount, category) {
   const date = new Date().toJSON().split("T")[0];
   const data = {
     type: "flex",
-    altText: `฿${amount} used by ${category}`,
+    altText: `฿${amount} used for ${category}`,
     contents: {
       type: "bubble",
       body: {
