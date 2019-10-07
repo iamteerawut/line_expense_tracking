@@ -27,7 +27,7 @@ app.post("/webhook", line.middleware(config), (req, res) => {
 });
 
 // event handler
-function handleEvent(event) {
+async function handleEvent(event) {
   if (
     event.type !== "message" ||
     event.message.type !== "text" ||
@@ -39,14 +39,25 @@ function handleEvent(event) {
   }
 
   // create a echoing text message
-  const echo = messageHandler(base, event.message.text);
+  const echo = await messageHandler(event.message.text);
 
   // use reply API
   return client.replyMessage(event.replyToken, echo);
 }
 
-// create flex bubble
-function createBubble(date, amount, category, todayUsage) {
+async function recordExpense(amount, category) {
+  const date = new Date().toJSON().split("T")[0];
+  const table = new Airtable({ apiKey: "keyiX5ZW3OoiIQrjB" })
+    .base("appLhxBgLIBdcxn2z")
+    .table("Uc68ae504e2766ba1fdee724be2c875d4");
+  const record = await table.create(
+    {
+      Date: date,
+      Category: category,
+      Amount: amount
+    },
+    { typecast: true }
+  );
   const data = {
     type: "flex",
     altText: `฿${amount} used for ${category}`,
@@ -61,11 +72,11 @@ function createBubble(date, amount, category, todayUsage) {
             text: "TRACK EXPENSE",
             weight: "bold",
             color: "#1DB446",
-            size: "lg"
+            size: "sm"
           },
           {
             type: "text",
-            text: `฿${amount} ${todayUsage}`,
+            text: `฿${amount}`,
             weight: "bold",
             size: "xxl",
             margin: "md"
@@ -73,13 +84,13 @@ function createBubble(date, amount, category, todayUsage) {
           {
             type: "text",
             text: `${category}`,
-            size: "md",
+            size: "xs",
             color: "#aaaaaa",
             wrap: true
           },
           {
             type: "separator",
-            margin: "sm"
+            margin: "md"
           },
           {
             type: "box",
@@ -96,34 +107,19 @@ function createBubble(date, amount, category, todayUsage) {
             ]
           }
         ]
+      },
+      styles: {
+        footer: {
+          separator: true
+        }
       }
     }
   };
   return data;
 }
 
-async function recordExpense(amount, category) {
-  const date = new Date().toJSON().split("T")[0];
-  const table = new Airtable({ apiKey: "keyiX5ZW3OoiIQrjB" })
-    .base("appLhxBgLIBdcxn2z")
-    .table("Uc68ae504e2766ba1fdee724be2c875d4");
-  const record = await table.create(
-    {
-      Date: date,
-      Category: category,
-      Amount: amount
-    },
-    { typecast: true }
-  );
-  const tableData = await table.select().all();
-  const total = records =>
-    records.map(r => +r.get("Amount") || 0).reduce((a, b) => a + b, 0);
-  const todayUsage = total(tableData.filter(r => r.get("Date") === date));
-  return createBubble(date, amount, category, todayUsage);
-}
-
 // message handler
-function messageHandler(base, message) {
+async function messageHandler(message) {
   let match;
   if ((match = message.match(/^([\d.]+)([tfghmol])$/i))) {
     const m = match;
@@ -138,12 +134,12 @@ function messageHandler(base, message) {
       o: "Occasion",
       l: "Lodging"
     }[m[2].toLowerCase()];
-    return recordExpense(amount, category);
+    return await recordExpense(amount, category);
   }
 }
 
 // listen on port
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`listening on ${port}`);
 });
