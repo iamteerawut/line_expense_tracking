@@ -131,7 +131,7 @@ async function getExepense(message) {
     .reduce((a, b) => (a < b ? a : b), date);
   const todayUsage = total(tableData.filter(r => r.get("Date") === date));
   const totalUsage = total(tableData);
-  if ((message = "td")) {
+  if (message == "td") {
     const data = {
       type: "flex",
       altText: `Today Usage is ฿${todayUsage}`,
@@ -191,7 +191,7 @@ async function getExepense(message) {
     };
     return data;
   }
-  if ((message = "to")) {
+  if (message == "to") {
     const data = {
       type: "flex",
       altText: `Total Usage is ฿${totalUsage}`,
@@ -270,10 +270,10 @@ async function messageHandler(message) {
     }[m[2].toLowerCase()];
     return await recordExpense(amount, category);
   }
-  if ((message = "td")) {
+  if (message == "td") {
     return getExepense(message);
   }
-  if ((message = "to")) {
+  if (message == "to") {
     return getExepense(message);
   }
 }
