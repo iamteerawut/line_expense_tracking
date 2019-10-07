@@ -47,7 +47,7 @@ async function handleEvent(event) {
 
 async function recordExpense(amount, category) {
   const date = new Date().toJSON().split("T")[0];
-  const table = new Airtable({ apiKey: "keyiX5ZW3OoiIQrjB" })
+  const table = new Airtable({ apiKey: process.env.AIRTABLE_TOKEN })
     .base("appLhxBgLIBdcxn2z")
     .table("Uc68ae504e2766ba1fdee724be2c875d4");
   const record = await table.create(
