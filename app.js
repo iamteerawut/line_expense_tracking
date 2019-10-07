@@ -189,6 +189,7 @@ async function getExepense(message) {
         }
       }
     };
+    return data;
   }
   if ((message = "to")) {
     const data = {
@@ -248,8 +249,8 @@ async function getExepense(message) {
         }
       }
     };
+    return data;
   }
-  return data;
 }
 // message handler
 async function messageHandler(message) {
