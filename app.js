@@ -1,9 +1,6 @@
 const line = require("@line/bot-sdk");
 const express = require("express");
 const Airtable = require("airtable");
-var base = new Airtable({ apiKey: "keyiX5ZW3OoiIQrjB" }).base(
-  "appLhxBgLIBdcxn2z"
-);
 
 // create LINE SDK config from env variables
 const config = {
@@ -49,19 +46,7 @@ function handleEvent(event) {
 }
 
 // create flex bubble
-function createBubble(base, amount, category) {
-  const date = new Date().toJSON().split("T")[0];
-  var tableData = base("Uc68ae504e2766ba1fdee724be2c875d4")
-    .select()
-    .all();
-  const normalRecords = tableData.filter(r => !r.get("Occasional"));
-  const total = records =>
-    records.map(r => +r.get("Amount") || 0).reduce((a, b) => a + b, 0);
-  const firstDate = normalRecords
-    .map(r => r.get("Date"))
-    .reduce((a, b) => (a < b ? a : b), date);
-  const todayUsage = total(normalRecords.filter(r => r.get("Date") === date));
-  const totalUsage = total(normalRecords);
+function createBubble(date, amount, category, todayUsage) {
   const data = {
     type: "flex",
     altText: `฿${amount} used for ${category}`,
@@ -114,7 +99,15 @@ function createBubble(base, amount, category) {
       }
     }
   };
-  base("Uc68ae504e2766ba1fdee724be2c875d4").create(
+  return data;
+}
+
+async function recordExpense(amount, category) {
+  const date = new Date().toJSON().split("T")[0];
+  const table = new Airtable({ apiKey: "keyiX5ZW3OoiIQrjB" })
+    .base("appLhxBgLIBdcxn2z")
+    .table("Uc68ae504e2766ba1fdee724be2c875d4");
+  const record = await table.create(
     {
       Date: date,
       Category: category,
@@ -122,7 +115,11 @@ function createBubble(base, amount, category) {
     },
     { typecast: true }
   );
-  return data;
+  const tableData = await table.select().all();
+  const total = records =>
+    records.map(r => +r.get("Amount") || 0).reduce((a, b) => a + b, 0);
+  const todayUsage = total(tableData.filter(r => r.get("Date") === date));
+  return createBubble(date, amount, category, todayUsage);
 }
 
 // message handler
@@ -141,7 +138,7 @@ function messageHandler(base, message) {
       o: "Occasion",
       l: "Lodging"
     }[m[2].toLowerCase()];
-    return createBubble(base, amount, category);
+    return recordExpense(amount, category);
   }
 }
 
