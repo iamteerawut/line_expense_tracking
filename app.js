@@ -118,6 +118,139 @@ async function recordExpense(amount, category) {
   return data;
 }
 
+async function getExepense(message) {
+  const date = new Date().toJSON().split("T")[0];
+  const table = new Airtable({ apiKey: process.env.AIRTABLE_TOKEN })
+    .base("appLhxBgLIBdcxn2z")
+    .table("Uc68ae504e2766ba1fdee724be2c875d4");
+  const tableData = await table.select().all();
+  const total = records =>
+    records.map(r => +r.get("Amount") || 0).reduce((a, b) => a + b, 0);
+  const firstDate = tableData
+    .map(r => r.get("Date"))
+    .reduce((a, b) => (a < b ? a : b), date);
+  const todayUsage = total(tableData.filter(r => r.get("Date") === date));
+  const totalUsage = total(tableData);
+  if ((message = "td")) {
+    const data = {
+      type: "flex",
+      altText: `Today Usage is ฿${todayUsage}`,
+      contents: {
+        type: "bubble",
+        body: {
+          type: "box",
+          layout: "vertical",
+          contents: [
+            {
+              type: "text",
+              text: "TRACK EXPENSE",
+              weight: "bold",
+              color: "#1DB446",
+              size: "sm"
+            },
+            {
+              type: "text",
+              text: `฿${todayUsage}`,
+              weight: "bold",
+              size: "xxl",
+              margin: "md"
+            },
+            {
+              type: "text",
+              text: `Today Usage`,
+              size: "xs",
+              color: "#aaaaaa",
+              wrap: true
+            },
+            {
+              type: "separator",
+              margin: "md"
+            },
+            {
+              type: "box",
+              layout: "horizontal",
+              margin: "md",
+              contents: [
+                {
+                  type: "text",
+                  text: `${date}`,
+                  color: "#aaaaaa",
+                  size: "xs",
+                  align: "end"
+                }
+              ]
+            }
+          ]
+        },
+        styles: {
+          footer: {
+            separator: true
+          }
+        }
+      }
+    };
+  }
+  if ((message = "to")) {
+    const data = {
+      type: "flex",
+      altText: `Total Usage is ฿${totalUsage}`,
+      contents: {
+        type: "bubble",
+        body: {
+          type: "box",
+          layout: "vertical",
+          contents: [
+            {
+              type: "text",
+              text: "TRACK EXPENSE",
+              weight: "bold",
+              color: "#1DB446",
+              size: "sm"
+            },
+            {
+              type: "text",
+              text: `฿${totalUsage}`,
+              weight: "bold",
+              size: "xxl",
+              margin: "md"
+            },
+            {
+              type: "text",
+              text: `Total Usage`,
+              size: "xs",
+              color: "#aaaaaa",
+              wrap: true
+            },
+            {
+              type: "separator",
+              margin: "md"
+            },
+            {
+              type: "box",
+              layout: "horizontal",
+              margin: "md",
+              contents: [
+                {
+                  type: "text",
+                  text: `${date}`,
+                  color: "#aaaaaa",
+                  size: "xs",
+                  align: "end"
+                }
+              ]
+            }
+          ]
+        },
+        styles: {
+          footer: {
+            separator: true
+          }
+        }
+      }
+    };
+  }
+  return data;
+}
 // message handler
 async function messageHandler(message) {
   let match;
@@ -135,6 +268,12 @@ async function messageHandler(message) {
       l: "Lodging"
     }[m[2].toLowerCase()];
     return await recordExpense(amount, category);
+  }
+  if ((message = "td")) {
+    return getExepense(message);
+  }
+  if ((message = "to")) {
+    return getExepense(message);
   }
 }
 
