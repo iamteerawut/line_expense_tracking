@@ -4,8 +4,8 @@ const Airtable = require("airtable");
 
 // create LINE SDK config from env variables
 const config = {
-  channelAccessToken: process.env.TOKEN,
-  channelSecret: process.env.SECRET
+  channelAccessToken: process.env.LINE_TOKEN,
+  channelSecret: process.env.LINE_SECRET
 };
 
 // create LINE SDK client
